@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "hairtype")
 public class Hairtype {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hairtype_id")

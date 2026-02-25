@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "type_product")
-public class TypeProduct {
-
+public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "type_product_id")
     private Integer typeProductId;
 
     @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    private String productTypeName;
 
-    public TypeProduct() {
+    public ProductType() {
     }
 
     public Integer getTypeProductId() {
@@ -25,11 +24,11 @@ public class TypeProduct {
         this.typeProductId = typeProductId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductTypeName() {
+        return productTypeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
     }
 }

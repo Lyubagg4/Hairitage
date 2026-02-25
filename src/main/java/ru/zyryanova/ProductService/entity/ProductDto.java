@@ -3,38 +3,29 @@ package ru.zyryanova.ProductService.entity;
 import java.util.List;
 
 public class ProductDto{
-    private int productDtoId;
-//    private String brand;
-    private String name;
+    private String productName;
+    private String productTypeName;
     private List<String> ingredients;
+    private String picUrl;
     private String price;
 
     public ProductDto() {
     }
 
-
-    public int getProductDtoId() {
-        return productDtoId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductDtoId(int productDtoId) {
-        this.productDtoId = productDtoId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-//    public String getBrand() {
-//        return brand;
-//    }
-//
-//    public void setBrand(String brand) {
-//        this.brand = brand;
-//    }
-
-    public String getName() {
-        return name;
+    public String getProductTypeName() {
+        return productTypeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
     }
 
     public List<String> getIngredients() {
@@ -43,6 +34,14 @@ public class ProductDto{
 
     public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     public String getPrice() {

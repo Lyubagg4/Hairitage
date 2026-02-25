@@ -1,7 +1,10 @@
 package ru.zyryanova.ProductService.entity;
 
 import jakarta.persistence.*;
+import ru.zyryanova.ProductService.enums.Groups;
 
+@Entity
+@Table(name = "product_classification_score")
 public class ProductClassificationScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,6 +88,17 @@ public class ProductClassificationScore {
     public void setHeavy_oils(int heavy_oils) {
         this.heavy_oils = heavy_oils;
     }
+
+    public void increment(Groups groups) {
+        switch (groups) {
+            case HUMECTANTS -> humecants++;
+            case EMOLLIENTS -> emolloents++;
+            case PROTEINS -> proteins++;
+            case DRYING_ALCOHOLS -> dryingAlcohols++;
+            case HEAVY_OILS -> heavy_oils++;
+        }
+    }
+
 }
 
 

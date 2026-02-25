@@ -1,4 +1,4 @@
-package ru.zyryanova.ProductService.entity.bd;
+package ru.zyryanova.ProductService.entity.bd.svyazy;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -15,21 +15,13 @@ public class RelevantRangeId implements Serializable {
 
     public RelevantRangeId() {}
 
-    public Integer getPurposeIngId() {
-        return purposeIngId;
-    }
-
-    public void setPurposeIngId(Integer purposeIngId) {
+    public RelevantRangeId(Integer purposeIngId, Integer hairtypeId) {
         this.purposeIngId = purposeIngId;
-    }
-
-    public Integer getHairtypeId() {
-        return hairtypeId;
-    }
-
-    public void setHairtypeId(Integer hairtypeId) {
         this.hairtypeId = hairtypeId;
     }
+
+    public Integer getPurposeIngId() { return purposeIngId; }
+    public Integer getHairtypeId() { return hairtypeId; }
 
     @Override
     public boolean equals(Object o) {
@@ -43,6 +35,4 @@ public class RelevantRangeId implements Serializable {
     public int hashCode() {
         return Objects.hash(purposeIngId, hairtypeId);
     }
-
-    // getters/setters
 }

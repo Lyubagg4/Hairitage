@@ -9,39 +9,39 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ingredient_id")
-    private Integer id;
+    private Integer ingredientId;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String ingredientName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_purpose_ing", referencedColumnName = "purpose_ing_id")
-    private PurposeIng purposeIng;
+    private Group groupId;
 
     public Ingredient() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIngredientId() {
+        return ingredientId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
-    public String getName() {
-        return name;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 
-    public PurposeIng getPurposeIng() {
-        return purposeIng;
+    public Group getGroupId() {
+        return groupId;
     }
 
-    public void setPurposeIng(PurposeIng purposeIng) {
-        this.purposeIng = purposeIng;
+    public void setGroupId(Group groupId) {
+        this.groupId = groupId;
     }
 }

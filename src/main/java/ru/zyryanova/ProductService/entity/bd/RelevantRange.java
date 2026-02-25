@@ -13,31 +13,61 @@ public class RelevantRange {
     @EmbeddedId
     private RelevantRangeId id;
 
-    @MapsId("purposeIngId")
+    @MapsId("groupId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_purpose_ing", referencedColumnName = "purpose_ing_id")
-    private Group purposeIng;
+    @JoinColumn(name = "group_id", referencedColumnName = "groupId")
+    private Groups group;
 
-    @MapsId("hairtypeId")
+    @MapsId("hairTypeId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_hairtype", referencedColumnName = "hairtype_id")
-    private Hairtype hairtype;
+    @JoinColumn(name = "hair_type_id", referencedColumnName = "hairTypeId")
+    private HairType hairtype;
 
     @Column(name = "min_value")
-    private BigDecimal minValue;
+    private Integer minValue;
 
     @Column(name = "max_value")
-    private BigDecimal maxValue;
+    private Integer maxValue;
 
     protected RelevantRange() {}
 
+    public RelevantRangeId getId() {
+        return id;
+    }
 
-    public RelevantRangeId getId() { return id; }
-    public Group getPurposeIng() { return purposeIng; }
-    public Hairtype getHairtype() { return hairtype; }
-    public BigDecimal getMinValue() { return minValue; }
-    public BigDecimal getMaxValue() { return maxValue; }
+    public void setId(RelevantRangeId id) {
+        this.id = id;
+    }
 
-    public void setMinValue(BigDecimal minValue) { this.minValue = minValue; }
-    public void setMaxValue(BigDecimal maxValue) { this.maxValue = maxValue; }
+    public Groups getGroup() {
+        return group;
+    }
+
+    public void setGroup(Groups group) {
+        this.group = group;
+    }
+
+    public HairType getHairtype() {
+        return hairtype;
+    }
+
+    public void setHairtype(HairType hairtype) {
+        this.hairtype = hairtype;
+    }
+
+    public Integer getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
+    }
+
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
+    }
 }

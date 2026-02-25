@@ -1,6 +1,6 @@
 package ru.zyryanova.ProductService.enums;
 
-public enum Groups {
+public enum Group {
     HUMECTANTS,
     EMOLLIENTS,
     PROTEINS,

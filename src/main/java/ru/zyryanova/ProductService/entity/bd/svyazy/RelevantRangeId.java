@@ -7,32 +7,40 @@ import java.util.Objects;
 @Embeddable
 public class RelevantRangeId implements Serializable {
 
-    @Column(name = "id_purpose_ing")
-    private Integer purposeIngId;
+    @Column(name = "group_id")
+    private Integer groupId;
 
-    @Column(name = "id_hairtype")
-    private Integer hairtypeId;
+    @Column(name = "hair_type_id")
+    private Integer hairTypeId;
 
     public RelevantRangeId() {}
 
-    public RelevantRangeId(Integer purposeIngId, Integer hairtypeId) {
-        this.purposeIngId = purposeIngId;
-        this.hairtypeId = hairtypeId;
+    public Integer getGroupId() {
+        return groupId;
     }
 
-    public Integer getPurposeIngId() { return purposeIngId; }
-    public Integer getHairtypeId() { return hairtypeId; }
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Integer getHairTypeId() {
+        return hairTypeId;
+    }
+
+    public void setHairTypeId(Integer hairTypeId) {
+        this.hairTypeId = hairTypeId;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RelevantRangeId that)) return false;
-        return Objects.equals(purposeIngId, that.purposeIngId)
-                && Objects.equals(hairtypeId, that.hairtypeId);
+        return Objects.equals(groupId, that.getGroupId())
+                && Objects.equals(hairTypeId, that.hairTypeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(purposeIngId, hairtypeId);
+        return Objects.hash(groupId, hairTypeId);
     }
 }

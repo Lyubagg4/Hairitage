@@ -2,7 +2,9 @@ package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -12,7 +14,7 @@ public class Product {
     @Column(name = "product_id")
     private Integer productId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,6 +29,14 @@ public class Product {
 
     @Column(name = "price")
     private String price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_suitability",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "hair_type_id")
+    )
+    private Set<HairType> productSuitability = new HashSet<>();
 
     public Product() {
     }

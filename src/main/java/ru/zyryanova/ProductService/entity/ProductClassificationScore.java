@@ -1,7 +1,7 @@
 package ru.zyryanova.ProductService.entity;
 
 import jakarta.persistence.*;
-import ru.zyryanova.ProductService.enums.Groups;
+import ru.zyryanova.ProductService.enums.Group;
 
 @Entity
 @Table(name = "product_classification_score")
@@ -16,10 +16,10 @@ public class ProductClassificationScore {
     private int productId;
 
     @Column(name = "humecants")
-    private int humecants;
+    private int humectants;
 
     @Column(name = "emollients")
-    private int emolloents;
+    private int emollients;
 
     @Column(name = "proteins")
     private int proteins;
@@ -28,9 +28,17 @@ public class ProductClassificationScore {
     private int dryingAlcohols;
 
     @Column(name = "heavy_oils")
-    private int heavy_oils;
+    private int heavyOils;
 
     public ProductClassificationScore() {
+    }
+
+    public void setHumectants(int humectants) {
+        this.humectants = humectants;
+    }
+
+    public int getHeavyOils() {
+        return heavyOils;
     }
 
     public int getProductClassificationScoreId() {
@@ -49,20 +57,20 @@ public class ProductClassificationScore {
         this.productId = productId;
     }
 
-    public int getHumecants() {
-        return humecants;
+    public int getHumectants() {
+        return humectants;
     }
 
     public void setHumecants(int humecants) {
-        this.humecants = humecants;
+        this.humectants = humecants;
     }
 
-    public int getEmolloents() {
-        return emolloents;
+    public int getEmollients() {
+        return emollients;
     }
 
-    public void setEmolloents(int emolloents) {
-        this.emolloents = emolloents;
+    public void setEmollients(int emollients) {
+        this.emollients = emollients;
     }
 
     public int getProteins() {
@@ -81,21 +89,29 @@ public class ProductClassificationScore {
         this.dryingAlcohols = dryingAlcohols;
     }
 
-    public int getHeavy_oils() {
-        return heavy_oils;
+
+
+    public void setHeavyOils(int heavyOils) {
+        this.heavyOils = heavyOils;
     }
 
-    public void setHeavy_oils(int heavy_oils) {
-        this.heavy_oils = heavy_oils;
+    public int getValue(Group group) {
+        return switch (group) {
+            case HUMECTANTS -> getHumectants();
+            case EMOLLIENTS -> getEmollients();
+            case PROTEINS -> getProteins();
+            case DRYING_ALCOHOLS -> getDryingAlcohols();
+            case HEAVY_OILS -> getHeavyOils();
+        };
     }
 
-    public void increment(Groups groups) {
-        switch (groups) {
-            case HUMECTANTS -> humecants++;
-            case EMOLLIENTS -> emolloents++;
+    public void increment(Group group) {
+        switch (group) {
+            case HUMECTANTS -> humectants++;
+            case EMOLLIENTS -> emollients++;
             case PROTEINS -> proteins++;
             case DRYING_ALCOHOLS -> dryingAlcohols++;
-            case HEAVY_OILS -> heavy_oils++;
+            case HEAVY_OILS -> heavyOils++;
         }
     }
 

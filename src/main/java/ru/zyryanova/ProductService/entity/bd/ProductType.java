@@ -3,25 +3,25 @@ package ru.zyryanova.ProductService.entity.bd;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "type_product")
+@Table(name = "product_type")
 public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "type_product_id")
-    private Integer typeProductId;
+    private Integer productTypeId;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "product_type_name", nullable = false, unique = true)
     private String productTypeName;
 
     public ProductType() {
     }
 
-    public Integer getTypeProductId() {
-        return typeProductId;
+    public Integer getProductTypeId() {
+        return productTypeId;
     }
 
-    public void setTypeProductId(Integer typeProductId) {
-        this.typeProductId = typeProductId;
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
     }
 
     public String getProductTypeName() {

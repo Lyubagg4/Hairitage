@@ -11,12 +11,12 @@ public class Ingredient {
     @Column(name = "ingredient_id")
     private Integer ingredientId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "ingredient_name", nullable = false)
     private String ingredientName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_purpose_ing", referencedColumnName = "purpose_ing_id")
-    private Group groupId;
+    @JoinColumn(name = "group_id", referencedColumnName = "groupId")
+    private Groups groupId;
 
     public Ingredient() {
     }
@@ -37,11 +37,11 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public Group getGroupId() {
+    public Groups getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Group groupId) {
+    public void setGroupId(Groups groupId) {
         this.groupId = groupId;
     }
 }

@@ -1,23 +1,22 @@
 package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
-import ru.zyryanova.ProductService.enums.Groups;
+import ru.zyryanova.ProductService.enums.Group;
 
 @Entity
-@Table(name = "purpose_ing")
-public class Group {
+@Table(name = "group")
+public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "purpose_ing_id")
+    @Column(name = "group_id")
     private Integer groupId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "name")
-    private Groups groupName;
+    @Column(name = "group_name")
+    private Group groupName;
 
-    public Group() {
+    public Groups() {
     }
-
 
     public Integer getGroupId() {
         return groupId;
@@ -27,11 +26,11 @@ public class Group {
         this.groupId = groupId;
     }
 
-    public Groups getGroupName() {
+    public Group getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(Groups groupName) {
+    public void setGroupName(Group groupName) {
         this.groupName = groupName;
     }
 }

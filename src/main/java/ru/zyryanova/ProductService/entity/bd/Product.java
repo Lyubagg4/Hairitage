@@ -18,8 +18,8 @@ public class Product {
     private String productName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_type_id", referencedColumnName = "productTypeId")
-    private int productTypeId;
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
 
     @Column(name = "ingredients_list", columnDefinition = "text[]")
     private List<String> ingredientsList;
@@ -57,12 +57,20 @@ public class Product {
         this.productName = productName;
     }
 
-    public int getProductTypeId() {
-        return productTypeId;
+    public ProductType getProductType() {
+        return productType;
     }
 
-    public void setProductTypeId(int productTypeId) {
-        this.productTypeId = productTypeId;
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Set<HairType> getProductSuitability() {
+        return productSuitability;
+    }
+
+    public void setProductSuitability(Set<HairType> productSuitability) {
+        this.productSuitability = productSuitability;
     }
 
     public List<String> getIngredientsList() {

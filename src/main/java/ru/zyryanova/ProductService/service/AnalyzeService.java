@@ -7,7 +7,6 @@ import ru.zyryanova.ProductService.entity.bd.*;
 import ru.zyryanova.ProductService.enums.Group;
 import ru.zyryanova.ProductService.repo.HairTypeRepo;
 import ru.zyryanova.ProductService.repo.IngredientRepo;
-import ru.zyryanova.ProductService.repo.ProductSuitabilityRepo;
 import ru.zyryanova.ProductService.repo.RelevantRangeRepo;
 
 import java.util.EnumMap;
@@ -20,21 +19,19 @@ public class AnalyzeService {
     private final IngredientRepo ingredientRepo;
     private final HairTypeRepo hairTypeRepo;
     private final RelevantRangeRepo relevantRangeRepo;
-    private final ProductSuitabilityRepo productSuitabilityRepo;
 
     @Autowired
-    public AnalyzeService(IngredientRepo ingredientRepo, HairTypeRepo hairTypeRepo, RelevantRangeRepo relevantRangeRepo, ProductSuitabilityRepo productSuitabilityRepo) {
+    public AnalyzeService(IngredientRepo ingredientRepo, HairTypeRepo hairTypeRepo, RelevantRangeRepo relevantRangeRepo) {
         this.ingredientRepo = ingredientRepo;
         this.hairTypeRepo = hairTypeRepo;
         this.relevantRangeRepo = relevantRangeRepo;
-        this.productSuitabilityRepo = productSuitabilityRepo;
     }
 
     public ProductClassificationScore analyzeSostav(Product product){
         ProductClassificationScore productClassificationScore = new ProductClassificationScore();
         for(String ingredient: product.getIngredientsList()){
-            Ingredient tekIngredient = ingredientRepo.findByName(ingredient);
-            Group groupOfTekIngredient = tekIngredient.getGroupId().getGroupName();
+            Ingredient tekIngredient = ingredientRepo.findByIngredientName(ingredient);
+            Group groupOfTekIngredient = tekIngredient.getGroup().getGroupName();
             productClassificationScore.increment(groupOfTekIngredient);
         }
         return productClassificationScore;
@@ -52,7 +49,7 @@ public class AnalyzeService {
         //в мапе лежат ключ - мапа (группа и relevant_range)
         Map<Integer, EnumMap<Group, RelevantRange>> rules = new HashMap<>();
         for(RelevantRange rr: listOfRelevantRanges){
-            int hairTypeId = rr.getHairtype().getHairTypeId();
+            int hairTypeId = rr.getHairType().getHairTypeId();
             Group group = rr.getGroup().getGroupName();//это enum
             rules.computeIfAbsent(hairTypeId, k -> new EnumMap<>(Group.class)).put(group, rr);
         }
@@ -61,7 +58,7 @@ public class AnalyzeService {
             int hairTypeId = hairType.getHairTypeId();
             EnumMap<Group, RelevantRange> rangeByGroup = rules.getOrDefault(hairTypeId, new EnumMap<>(Group.class));
             if (isOkForHairtype(pcs, rangeByGroup)) {
-                productSuitabilityRepo.insertIfNotExists(product.getProductId(), hairTypeId);
+                product.getProductSuitability().add(hairType);
             }
         }
     }

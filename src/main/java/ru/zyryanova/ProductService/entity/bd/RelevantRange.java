@@ -15,13 +15,13 @@ public class RelevantRange {
 
     @MapsId("groupId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "group_id", referencedColumnName = "groupId")
+    @JoinColumn(name = "group_id")
     private Groups group;
 
     @MapsId("hairTypeId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "hair_type_id", referencedColumnName = "hairTypeId")
-    private HairType hairtype;
+    @JoinColumn(name = "hair_type_id")
+    private HairType hairType;
 
     @Column(name = "min_value")
     private Integer minValue;
@@ -47,12 +47,12 @@ public class RelevantRange {
         this.group = group;
     }
 
-    public HairType getHairtype() {
-        return hairtype;
+    public HairType getHairType() {
+        return hairType;
     }
 
-    public void setHairtype(HairType hairtype) {
-        this.hairtype = hairtype;
+    public void setHairType(HairType hairType) {
+        this.hairType = hairType;
     }
 
     public Integer getMinValue() {

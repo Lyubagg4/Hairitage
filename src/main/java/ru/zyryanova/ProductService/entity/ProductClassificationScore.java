@@ -1,6 +1,7 @@
 package ru.zyryanova.ProductService.entity;
 
 import jakarta.persistence.*;
+import ru.zyryanova.ProductService.entity.bd.Product;
 import ru.zyryanova.ProductService.enums.Group;
 
 @Entity
@@ -11,9 +12,9 @@ public class ProductClassificationScore {
     @Column(name = "product_сlassification_score_id")
     private int productClassificationScoreId;
 
-    @Column(name = "product_id")
     @OneToOne
-    private int productId;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(name = "humecants")
     private int humectants;
@@ -49,12 +50,8 @@ public class ProductClassificationScore {
         this.productClassificationScoreId = productClassificationScoreId;
     }
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getHumectants() {

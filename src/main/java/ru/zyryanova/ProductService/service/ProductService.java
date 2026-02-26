@@ -13,15 +13,13 @@ import ru.zyryanova.ProductService.repo.*;
 public class ProductService {
     private final ProductRepo productRepo;
     private final RelevantRangeRepo relevantRangeRepo;
-    private final ProductClassScoreRepo productClassScoreRepo;
     private final IngredientRepo ingredientRepo;
     private final ProductTypeRepo productTypeRepo;
 
     @Autowired
-    public ProductService(ProductRepo productRepo, RelevantRange relevantRangeRepo, RelevantRangeRepo relevantRangeRepo1, ProductClassScoreRepo productClassScoreRepo, IngredientRepo ingredientRepo, ProductTypeRepo productTypeRepo) {
+    public ProductService(ProductRepo productRepo, RelevantRangeRepo relevantRangeRepo1, IngredientRepo ingredientRepo, ProductTypeRepo productTypeRepo) {
         this.productRepo = productRepo;
         this.relevantRangeRepo = relevantRangeRepo1;
-        this.productClassScoreRepo = productClassScoreRepo;
         this.ingredientRepo = ingredientRepo;
         this.productTypeRepo = productTypeRepo;
     }
@@ -37,7 +35,7 @@ public class ProductService {
         Product product = new Product();
         product.setProductName(productDto.getProductName());
         ProductType productType = productTypeRepo.findByProductTypeName(productDto.getProductTypeName());
-        product.setProductTypeId(productType.getTypeProductId());
+        product.setProductType(productType);
         product.setIngredientsList(productDto.getIngredients());
         product.setPrice(productDto.getPrice());
         product.setPicUrl(productDto.getPicUrl());

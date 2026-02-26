@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface RelevantRangeRepo extends JpaRepository<RelevantRange, Integer> {
-    Optional<Ingredient> findByPurposeIngId(Integer id);
 
     List<RelevantRange> findByHairType_HairTypeIdIn(List<Integer> hairTypeIds);
 

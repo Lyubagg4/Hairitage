@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import ru.zyryanova.ProductService.enums.Group;
 
 @Entity
-@Table(name = "group")
+@Table(name = "groups")
 public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

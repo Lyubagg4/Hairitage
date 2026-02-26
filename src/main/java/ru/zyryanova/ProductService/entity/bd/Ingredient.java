@@ -15,8 +15,8 @@ public class Ingredient {
     private String ingredientName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "group_id", referencedColumnName = "groupId")
-    private Groups groupId;
+    @JoinColumn(name = "group_id")
+    private Groups group;
 
     public Ingredient() {
     }
@@ -37,11 +37,11 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public Groups getGroupId() {
-        return groupId;
+    public Groups getGroup() {
+        return group;
     }
 
-    public void setGroupId(Groups groupId) {
-        this.groupId = groupId;
+    public void setGroup(Groups group) {
+        this.group = group;
     }
 }

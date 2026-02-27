@@ -1,0 +1,932 @@
+===== ./src/test/java/ru/zyryanova/ProductService/ProductServiceApplicationTests.java =====
+package ru.zyryanova.ProductService;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ProductServiceApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/entity/ProductDto.java =====
+package ru.zyryanova.ProductService.entity;
+
+import java.util.List;
+
+public class ProductDto{
+    private String productName;
+    private String productTypeName;
+    private List<String> ingredients;
+    private String picUrl;
+    private String price;
+
+    public ProductDto() {
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductTypeName() {
+        return productTypeName;
+    }
+
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
+    }
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+}
+
+
+
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/svyazy/RelevantRangeId.java =====
+package ru.zyryanova.ProductService.entity.bd.svyazy;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+
+@Embeddable
+public class RelevantRangeId implements Serializable {
+
+    @Column(name = "group_id")
+    private Integer groupId;
+
+    @Column(name = "hair_type_id")
+    private Integer hairTypeId;
+
+    public RelevantRangeId() {}
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Integer getHairTypeId() {
+        return hairTypeId;
+    }
+
+    public void setHairTypeId(Integer hairTypeId) {
+        this.hairTypeId = hairTypeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RelevantRangeId that)) return false;
+        return Objects.equals(groupId, that.getGroupId())
+                && Objects.equals(hairTypeId, that.hairTypeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupId, hairTypeId);
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/svyazy/ProductClassScoreId.java =====
+package ru.zyryanova.ProductService.entity.bd.svyazy;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+
+@Embeddable
+public class ProductClassScoreId implements Serializable {
+
+    @Column(name = "product_id")
+    private Integer productId;
+
+    @Column(name = "group_id")
+    private Integer groupId;
+
+    public ProductClassScoreId() {}
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductClassScoreId that)) return false;
+        return Objects.equals(productId, that.productId)
+                && Objects.equals(groupId, that.groupId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, groupId);
+    }
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/Product.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "product")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
+    private Integer productId;
+
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
+
+    @Column(name = "ingredients_list", columnDefinition = "text[]")
+    private List<String> ingredientsList;
+
+    @Column(name = "pic_url")
+    private String picUrl;
+
+    @Column(name = "price")
+    private String price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_suitability",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "hair_type_id")
+    )
+    private Set<HairType> productSuitability = new HashSet<>();
+
+    public Product() {
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Set<HairType> getProductSuitability() {
+        return productSuitability;
+    }
+
+    public void setProductSuitability(Set<HairType> productSuitability) {
+        this.productSuitability = productSuitability;
+    }
+
+    public List<String> getIngredientsList() {
+        return ingredientsList;
+    }
+
+    public void setIngredientsList(List<String> ingredientsList) {
+        this.ingredientsList = ingredientsList;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/Groups.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+import jakarta.persistence.*;
+import ru.zyryanova.ProductService.enums.Group;
+
+@Entity
+@Table(name = "groups")
+public class Groups {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "group_id")
+    private Integer groupId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "group_name")
+    private Group groupName;
+
+    public Groups() {
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Group getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(Group groupName) {
+        this.groupName = groupName;
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/Ingredient.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ingredient")
+public class Ingredient {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ingredient_id")
+    private Integer ingredientId;
+
+    @Column(name = "ingredient_name", nullable = false)
+    private String ingredientName;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "group_id")
+    private Groups group;
+
+    public Ingredient() {
+    }
+
+    public Integer getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
+    public Groups getGroup() {
+        return group;
+    }
+
+    public void setGroup(Groups group) {
+        this.group = group;
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/ProductType.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "product_type")
+public class ProductType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "type_product_id")
+    private Integer productTypeId;
+
+    @Column(name = "product_type_name", nullable = false, unique = true)
+    private String productTypeName;
+
+    public ProductType() {
+    }
+
+    public Integer getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+
+    public String getProductTypeName() {
+        return productTypeName;
+    }
+
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/HairType.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "hair_type")
+public class HairType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hair_type_id")
+    private Integer hairTypeId;
+
+    @Column(name = "hair_type_name", nullable = false, unique = true)
+    private String hairTypeName;
+
+    public HairType() {
+    }
+
+    public Integer getHairTypeId() {
+        return hairTypeId;
+    }
+
+    public void setHairTypeId(Integer hairTypeId) {
+        this.hairTypeId = hairTypeId;
+    }
+
+    public String getHairTypeName() {
+        return hairTypeName;
+    }
+
+    public void setHairTypeName(String hairTypeName) {
+        this.hairTypeName = hairTypeName;
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/bd/RelevantRange.java =====
+package ru.zyryanova.ProductService.entity.bd;
+
+
+import jakarta.persistence.*;
+import ru.zyryanova.ProductService.entity.bd.svyazy.RelevantRangeId;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "relevant_range")
+public class RelevantRange {
+
+    @EmbeddedId
+    private RelevantRangeId id;
+
+    @MapsId("groupId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "group_id")
+    private Groups group;
+
+    @MapsId("hairTypeId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "hair_type_id")
+    private HairType hairType;
+
+    @Column(name = "min_value")
+    private Integer minValue;
+
+    @Column(name = "max_value")
+    private Integer maxValue;
+
+    protected RelevantRange() {}
+
+    public RelevantRangeId getId() {
+        return id;
+    }
+
+    public void setId(RelevantRangeId id) {
+        this.id = id;
+    }
+
+    public Groups getGroup() {
+        return group;
+    }
+
+    public void setGroup(Groups group) {
+        this.group = group;
+    }
+
+    public HairType getHairType() {
+        return hairType;
+    }
+
+    public void setHairType(HairType hairType) {
+        this.hairType = hairType;
+    }
+
+    public Integer getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
+    }
+
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
+    }
+}
+===== ./src/main/java/ru/zyryanova/ProductService/entity/ProductClassificationScore.java =====
+package ru.zyryanova.ProductService.entity;
+
+import jakarta.persistence.*;
+import ru.zyryanova.ProductService.entity.bd.Product;
+import ru.zyryanova.ProductService.enums.Group;
+
+@Entity
+@Table(name = "product_classification_score")
+public class ProductClassificationScore {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_сlassification_score_id")
+    private int productClassificationScoreId;
+
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @Column(name = "humecants")
+    private int humectants;
+
+    @Column(name = "emollients")
+    private int emollients;
+
+    @Column(name = "proteins")
+    private int proteins;
+
+    @Column(name = "drying_alcohols")
+    private int dryingAlcohols;
+
+    @Column(name = "heavy_oils")
+    private int heavyOils;
+
+    public ProductClassificationScore() {
+    }
+
+    public void setHumectants(int humectants) {
+        this.humectants = humectants;
+    }
+
+    public int getHeavyOils() {
+        return heavyOils;
+    }
+
+    public int getProductClassificationScoreId() {
+        return productClassificationScoreId;
+    }
+
+    public void setProductClassificationScoreId(int productClassificationScoreId) {
+        this.productClassificationScoreId = productClassificationScoreId;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getHumectants() {
+        return humectants;
+    }
+
+    public void setHumecants(int humecants) {
+        this.humectants = humecants;
+    }
+
+    public int getEmollients() {
+        return emollients;
+    }
+
+    public void setEmollients(int emollients) {
+        this.emollients = emollients;
+    }
+
+    public int getProteins() {
+        return proteins;
+    }
+
+    public void setProteins(int proteins) {
+        this.proteins = proteins;
+    }
+
+    public int getDryingAlcohols() {
+        return dryingAlcohols;
+    }
+
+    public void setDryingAlcohols(int dryingAlcohols) {
+        this.dryingAlcohols = dryingAlcohols;
+    }
+
+
+
+    public void setHeavyOils(int heavyOils) {
+        this.heavyOils = heavyOils;
+    }
+
+    public int getValue(Group group) {
+        return switch (group) {
+            case HUMECTANTS -> getHumectants();
+            case EMOLLIENTS -> getEmollients();
+            case PROTEINS -> getProteins();
+            case DRYING_ALCOHOLS -> getDryingAlcohols();
+            case HEAVY_OILS -> getHeavyOils();
+        };
+    }
+
+    public void increment(Group group) {
+        switch (group) {
+            case HUMECTANTS -> humectants++;
+            case EMOLLIENTS -> emollients++;
+            case PROTEINS -> proteins++;
+            case DRYING_ALCOHOLS -> dryingAlcohols++;
+            case HEAVY_OILS -> heavyOils++;
+        }
+    }
+
+}
+
+
+
+===== ./src/main/java/ru/zyryanova/ProductService/enums/Group.java =====
+package ru.zyryanova.ProductService.enums;
+
+public enum Group {
+    HUMECTANTS,
+    EMOLLIENTS,
+    PROTEINS,
+    DRYING_ALCOHOLS,
+    HEAVY_OILS
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/controller/ProductController.java =====
+package ru.zyryanova.ProductService.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.zyryanova.ProductService.entity.ProductDto;
+import ru.zyryanova.ProductService.entity.bd.Product;
+import ru.zyryanova.ProductService.service.AnalyzeService;
+import ru.zyryanova.ProductService.service.ProductService;
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+    private final ProductService productService;
+    private final AnalyzeService analyzeService;
+
+    @Autowired
+    public ProductController(ProductService productService, AnalyzeService analyzeService) {
+        this.productService = productService;
+        this.analyzeService = analyzeService;
+    }
+
+    @PostMapping("/new")
+    public void createProduct(@RequestBody ProductDto productDto){
+        int productId = productService.createProduct(productDto).getProductId();
+        analyzeService.defineHairType(productId);
+    }
+
+    Product convertToProduct(ProductDto productDto){
+        Product product = new Product();
+        return product;
+    }
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/ProductServiceApplication.java =====
+package ru.zyryanova.ProductService;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ProductServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProductServiceApplication.class, args);
+	}
+
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/service/AnalyzeService.java =====
+package ru.zyryanova.ProductService.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.zyryanova.ProductService.entity.ProductClassificationScore;
+import ru.zyryanova.ProductService.entity.bd.*;
+import ru.zyryanova.ProductService.enums.Group;
+import ru.zyryanova.ProductService.repo.*;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class AnalyzeService {
+    private final IngredientRepo ingredientRepo;
+    private final ProductRepo productRepo;
+    private final HairTypeRepo hairTypeRepo;
+    private final RelevantRangeRepo relevantRangeRepo;
+    private final ProductClassificationScoreRepo productClassificationScoreRepo;
+    private final RulesCacheService rulesCacheService;
+
+
+    @Autowired
+    public AnalyzeService(IngredientRepo ingredientRepo, ProductRepo productRepo, HairTypeRepo hairTypeRepo, RelevantRangeRepo relevantRangeRepo, ProductClassificationScoreRepo productClassificationScoreRepo, RulesCacheService rulesCacheService) {
+        this.ingredientRepo = ingredientRepo;
+        this.productRepo = productRepo;
+        this.hairTypeRepo = hairTypeRepo;
+        this.relevantRangeRepo = relevantRangeRepo;
+        this.productClassificationScoreRepo = productClassificationScoreRepo;
+        this.rulesCacheService = rulesCacheService;
+    }
+
+    public ProductClassificationScore analyzeSostav(Product product){
+        ProductClassificationScore productClassificationScore = new ProductClassificationScore();
+        for(String ingredient: product.getIngredientsList()){
+            Ingredient tekIngredient = ingredientRepo.findByIngredientName(ingredient);
+            Group groupOfTekIngredient = tekIngredient.getGroup().getGroupName();
+            productClassificationScore.increment(groupOfTekIngredient);
+        }
+        return productClassificationScore;
+    }
+    @Transactional
+    public void defineHairType(int productId){
+        Product product = productRepo.findById(productId).orElseThrow();
+        Map<Integer, EnumMap<Group, RelevantRange>> rules = rulesCacheService.getRules();
+        ProductClassificationScore pcs = analyzeSostav(product);
+        for(HairType hairType: rulesCacheService.getHairTypes()){
+            int hairTypeId = hairType.getHairTypeId();
+            EnumMap<Group, RelevantRange> rangeByGroup = rules.getOrDefault(hairTypeId, new EnumMap<>(Group.class));
+            if (isOkForHairtype(pcs, rangeByGroup)) {
+                product.getProductSuitability().add(hairType);
+            }
+        }
+        productClassificationScoreRepo.save(pcs);
+    }
+    public boolean isOkForHairtype(ProductClassificationScore pcs, EnumMap<Group, RelevantRange> rangeByGroup){
+        for(RelevantRange rr: rangeByGroup.values()){
+
+            if (rr == null) continue; // если мы его не учли то пропускаем (норм ли это хз)
+
+            Group group = rr.getGroup().getGroupName();
+            int valueOfTekGroup = pcs.getValue(group);
+            if(valueOfTekGroup>rr.getMaxValue() || valueOfTekGroup<rr.getMinValue()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/service/ProductService.java =====
+package ru.zyryanova.ProductService.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.zyryanova.ProductService.entity.ProductDto;
+import ru.zyryanova.ProductService.entity.bd.Product;
+import ru.zyryanova.ProductService.entity.bd.ProductType;
+import ru.zyryanova.ProductService.entity.bd.RelevantRange;
+import ru.zyryanova.ProductService.repo.*;
+
+
+@Service
+public class ProductService {
+    private final ProductRepo productRepo;
+    private final RelevantRangeRepo relevantRangeRepo;
+    private final IngredientRepo ingredientRepo;
+    private final ProductTypeRepo productTypeRepo;
+
+    @Autowired
+    public ProductService(ProductRepo productRepo, RelevantRangeRepo relevantRangeRepo1, IngredientRepo ingredientRepo, ProductTypeRepo productTypeRepo) {
+        this.productRepo = productRepo;
+        this.relevantRangeRepo = relevantRangeRepo1;
+        this.ingredientRepo = ingredientRepo;
+        this.productTypeRepo = productTypeRepo;
+    }
+
+    @Transactional
+    public Product createProduct(ProductDto productDto) {
+        return productRepo.save(convertToProduct(productDto));
+    }
+
+    public Product convertToProduct(ProductDto productDto){
+        Product product = new Product();
+        product.setProductName(productDto.getProductName());
+        ProductType productType = productTypeRepo.findByProductTypeName(productDto.getProductTypeName());
+        product.setProductType(productType);
+        product.setIngredientsList(productDto.getIngredients());
+        product.setPrice(productDto.getPrice());
+        product.setPicUrl(productDto.getPicUrl());
+        return product;
+    }
+}
+
+
+===== ./src/main/java/ru/zyryanova/ProductService/service/RulesCacheService.java =====
+package ru.zyryanova.ProductService.service;
+
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.zyryanova.ProductService.entity.bd.HairType;
+import ru.zyryanova.ProductService.entity.bd.RelevantRange;
+import ru.zyryanova.ProductService.enums.Group;
+import ru.zyryanova.ProductService.repo.HairTypeRepo;
+import ru.zyryanova.ProductService.repo.RelevantRangeRepo;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class RulesCacheService {
+
+    private final HairTypeRepo hairTypeRepo;
+    private final RelevantRangeRepo relevantRangeRepo;
+
+    private volatile Map<Integer, EnumMap<Group, RelevantRange>> rules = Map.of();
+    private volatile List<HairType> hairTypes = List.of();
+
+    public RulesCacheService(HairTypeRepo hairTypeRepo, RelevantRangeRepo relevantRangeRepo) {
+        this.hairTypeRepo = hairTypeRepo;
+        this.relevantRangeRepo = relevantRangeRepo;
+    }
+
+    @PostConstruct
+    @Transactional(readOnly = true)
+    public void init() {
+        reload();
+    }
+
+    @Transactional(readOnly = true)
+    public synchronized void reload() {
+        hairTypes = hairTypeRepo.findAll();
+
+        List<Integer> hairTypeIds = hairTypes.stream()
+                .map(HairType::getHairTypeId)
+                .toList();
+
+        List<RelevantRange> ranges = relevantRangeRepo.findByHairType_HairTypeIdIn(hairTypeIds);
+
+        Map<Integer, EnumMap<Group, RelevantRange>> built = new HashMap<>();
+        for (RelevantRange rr : ranges) {
+            int hairTypeId = rr.getHairType().getHairTypeId();
+            Group group = rr.getGroup().getGroupName();
+            built.computeIfAbsent(hairTypeId, k -> new EnumMap<>(Group.class)).put(group, rr);
+        }
+
+        rules = built;
+    }
+
+    public Map<Integer, EnumMap<Group, RelevantRange>> getRules() {
+        return rules;
+    }
+
+    public List<HairType> getHairTypes() {
+        return hairTypes;
+    }
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/repo/ProductRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ru.zyryanova.ProductService.entity.bd.Product;
+
+@Repository
+public interface ProductRepo extends JpaRepository<Product, Integer>{
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/repo/RelevantRangeRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ru.zyryanova.ProductService.entity.bd.Ingredient;
+import ru.zyryanova.ProductService.entity.bd.RelevantRange;
+import ru.zyryanova.ProductService.entity.bd.svyazy.RelevantRangeId;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface RelevantRangeRepo extends JpaRepository<RelevantRange, RelevantRangeId> {
+    List<RelevantRange> findByHairType_HairTypeIdIn(List<Integer> hairTypeIds);
+}
+===== ./src/main/java/ru/zyryanova/ProductService/repo/HairTypeRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.zyryanova.ProductService.entity.bd.HairType;
+
+public interface HairTypeRepo extends JpaRepository<HairType, Integer> {
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/repo/IngredientRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.zyryanova.ProductService.entity.bd.Ingredient;
+
+public interface IngredientRepo extends JpaRepository<Ingredient, Integer> {
+    Ingredient findByIngredientName(String name);
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/repo/ProductClassificationScoreRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.zyryanova.ProductService.entity.ProductClassificationScore;
+
+public interface ProductClassificationScoreRepo extends JpaRepository<ProductClassificationScore, Integer> {
+}
+
+===== ./src/main/java/ru/zyryanova/ProductService/repo/ProductTypeRepo.java =====
+package ru.zyryanova.ProductService.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.zyryanova.ProductService.entity.bd.ProductType;
+
+public interface ProductTypeRepo extends JpaRepository<ProductType, Integer> {
+    ProductType findByProductTypeName(String productTypeName);
+}
+

@@ -24,9 +24,8 @@ public class ProductController {
 
     @PostMapping("/new")
     public void createProduct(@RequestBody ProductDto productDto){
-        Product product = productService.createProduct(productDto);
-        analyzeService.defineHairType(product);
-
+        int productId = productService.createProduct(productDto).getProductId();
+        analyzeService.defineHairType(productId);
     }
 
     Product convertToProduct(ProductDto productDto){

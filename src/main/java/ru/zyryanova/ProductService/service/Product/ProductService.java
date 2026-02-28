@@ -1,4 +1,4 @@
-package ru.zyryanova.ProductService.service;
+package ru.zyryanova.ProductService.service.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.zyryanova.ProductService.entity.ProductDto;
 import ru.zyryanova.ProductService.entity.bd.Product;
 import ru.zyryanova.ProductService.entity.bd.ProductType;
-import ru.zyryanova.ProductService.entity.bd.RelevantRange;
 import ru.zyryanova.ProductService.repo.*;
 
 

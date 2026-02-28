@@ -6,30 +6,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.zyryanova.ProductService.entity.ProductDto;
-import ru.zyryanova.ProductService.entity.bd.Product;
-import ru.zyryanova.ProductService.service.AnalyzeService;
-import ru.zyryanova.ProductService.service.ProductService;
+import ru.zyryanova.ProductService.service.Product.AnalyzeService;
+import ru.zyryanova.ProductService.service.Product.ProductService;
+import ru.zyryanova.ProductService.service.RulesCacheService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
     private final AnalyzeService analyzeService;
+    private final RulesCacheService rulesCacheService;
 
     @Autowired
-    public ProductController(ProductService productService, AnalyzeService analyzeService) {
+    public ProductController(ProductService productService, AnalyzeService analyzeService, RulesCacheService rulesCacheService) {
         this.productService = productService;
         this.analyzeService = analyzeService;
+        this.rulesCacheService = rulesCacheService;
     }
 
-    @PostMapping("/new")
-    public void createProduct(@RequestBody ProductDto productDto){
-        int productId = productService.createProduct(productDto).getProductId();
-        analyzeService.defineHairType(productId);
-    }
-
-    Product convertToProduct(ProductDto productDto){
-        Product product = new Product();
-        return product;
+    @PostMapping("/addProducts")
+    public void createProduct(@RequestBody List<ProductDto> productDto){
+        rulesCacheService.reload();
+        for(ProductDto tekDto: productDto){
+            int productId = productService.createProduct(tekDto).getProductId();
+            analyzeService.defineHairType(productId);
+        }
     }
 }

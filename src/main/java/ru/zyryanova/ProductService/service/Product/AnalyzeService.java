@@ -1,4 +1,4 @@
-package ru.zyryanova.ProductService.service;
+package ru.zyryanova.ProductService.service.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +7,7 @@ import ru.zyryanova.ProductService.entity.ProductClassificationScore;
 import ru.zyryanova.ProductService.entity.bd.*;
 import ru.zyryanova.ProductService.enums.Group;
 import ru.zyryanova.ProductService.repo.*;
+import ru.zyryanova.ProductService.service.RulesCacheService;
 import ru.zyryanova.ProductService.tools.Range;
 
 import java.util.EnumMap;
@@ -34,6 +35,7 @@ public class AnalyzeService {
 
     public ProductClassificationScore analyzeSostav(Product product){
         ProductClassificationScore productClassificationScore = new ProductClassificationScore();
+        productClassificationScore.setProduct(product);
         for(String ingredient: product.getIngredientsList()){
             Ingredient tekIngredient = ingredientRepo.findByIngredientName(ingredient);
             Group groupOfTekIngredient = tekIngredient.getGroup().getGroupName();
@@ -46,7 +48,7 @@ public class AnalyzeService {
         Product product = productRepo.findById(productId).orElseThrow();
         Map<Integer, EnumMap<Group, Range>> rules = rulesCacheService.getRules();
         ProductClassificationScore pcs = analyzeSostav(product);
-        for(int hairTypeId: rulesCacheService.getHairTypes()){
+        for(int hairTypeId: rules.keySet()){
             EnumMap<Group, Range> rangeByGroup = rules.getOrDefault(hairTypeId, new EnumMap<>(Group.class));
             if (isOkForHairType(pcs, rangeByGroup)) {
                 HairType hairType = hairTypeRepo.findById(hairTypeId).orElseThrow();

@@ -44,3 +44,5 @@ public class RelevantRangeId implements Serializable {
         return Objects.hash(groupId, hairTypeId);
     }
 }
+
+

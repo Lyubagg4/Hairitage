@@ -2,9 +2,9 @@ package ru.zyryanova.ProductService.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.zyryanova.ProductService.entity.admin.Admin;
+import ru.zyryanova.ProductService.entity.auth.Person;
 
 @Repository
-public interface AdminRepo extends JpaRepository<Admin, Integer> {
-    Admin findByUsername(String username);
+public interface PersonRepo extends JpaRepository<Person, Integer> {
+    Person findByEmail(String email);
 }

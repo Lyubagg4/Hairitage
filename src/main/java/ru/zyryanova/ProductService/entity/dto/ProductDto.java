@@ -1,4 +1,4 @@
-package ru.zyryanova.ProductService.entity;
+package ru.zyryanova.ProductService.entity.dto;
 
 import java.util.List;
 

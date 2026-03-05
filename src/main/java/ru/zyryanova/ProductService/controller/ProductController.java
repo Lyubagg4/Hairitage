@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.zyryanova.ProductService.entity.ProductDto;
+import ru.zyryanova.ProductService.entity.dto.ProductDto;
 import ru.zyryanova.ProductService.service.Product.AnalyzeService;
 import ru.zyryanova.ProductService.service.Product.ProductService;
 import ru.zyryanova.ProductService.service.RulesCacheService;

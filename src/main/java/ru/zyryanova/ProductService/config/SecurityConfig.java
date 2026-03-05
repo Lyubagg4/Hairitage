@@ -8,30 +8,48 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.zyryanova.ProductService.service.Admin.AdminDetailsService;
+import ru.zyryanova.ProductService.service.User.PersonDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final AdminDetailsService adminDetailsService;
+    private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public SecurityConfig(AdminDetailsService adminDetailsService) {
-        this.adminDetailsService = adminDetailsService;
+    public SecurityConfig(PersonDetailsService personDetailsService) {
+        this.personDetailsService = personDetailsService;
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http){
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
+                                .requestMatchers(
+                                        "/login",
+                                        "/user/registration",
+                                        "/user/selection"
+                                ).permitAll()
+                                .requestMatchers("/user/accountInfo").authenticated()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/product/addProducts").hasRole("ADMIN")
                                 .anyRequest().permitAll()
-                       // .requestMatchers("/selection").permitAll()
-                       //.requestMatchers().permitAll()
-                       // .requestMatchers().permitAll()
-                       // .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(401);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"ok\":false,\"error\":\"unauthorized\"}");
+                        })
+                        .accessDeniedHandler((req, res, e) -> {
+                            res.setStatus(403);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"ok\":false,\"error\":\"forbidden\"}");
+                        })
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .successHandler((req, res, auth) -> {
                             res.setStatus(200);
                             res.setContentType("application/json");
@@ -43,7 +61,8 @@ public class SecurityConfig {
                             res.getWriter().write("{\"ok\":false,\"error\":\"bad_credentials\"}");
                         })
                     )
-                .userDetailsService(adminDetailsService);
+                .logout(logout -> logout.logoutUrl("/logout"))
+                .userDetailsService(personDetailsService);
         return http.build();
     }
     @Bean

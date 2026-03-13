@@ -4,12 +4,12 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.zyryanova.ProductService.entity.dto.ProductDto;
 import ru.zyryanova.ProductService.entity.auth.Person;
 import ru.zyryanova.ProductService.entity.bd.HairType;
-import ru.zyryanova.ProductService.entity.bd.Product;
+import ru.zyryanova.ProductService.finder.Finder;
 import ru.zyryanova.ProductService.repo.HairTypeRepo;
 import ru.zyryanova.ProductService.repo.PersonRepo;
+import ru.zyryanova.ProductService.repo.ProductRepo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +19,12 @@ import java.util.Map;
 public class SelectionService {
     private final PersonRepo personRepo;
     private final HairTypeRepo hairTypeRepo;
+    private final Finder finder;
 
-    public SelectionService(PersonRepo personRepo, HairTypeRepo hairTypeRepo) {
+    public SelectionService(PersonRepo personRepo, HairTypeRepo hairTypeRepo, Finder finder) {
         this.personRepo = personRepo;
         this.hairTypeRepo = hairTypeRepo;
+        this.finder = finder;
     }
     @Transactional
     public int selectHairType(List<Integer> answers, Authentication authentication){
@@ -39,24 +41,15 @@ public class SelectionService {
                 resType = key;
             }
         }
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            Person person = personRepo.findByEmail(authentication.getName());
+        if (authentication!=null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Person person = finder.findPersonOrThrow(authentication.getName());
             HairType hairType = hairTypeRepo.findById(resType).orElseThrow();
             person.setHairType(hairType);
             personRepo.save(person);
         }
         return resType;
     }
-    @Transactional
-    public List<ProductDto> responseList(List<Product> listOfProducts){
-        return listOfProducts.stream().map(p ->{
-            ProductDto dto = new ProductDto();
-            dto.setProductName(p.getProductName());
-            dto.setProductTypeName(p.getProductType().getProductTypeName());
-            dto.setIngredients(p.getIngredientsList());
-            dto.setPicUrl(p.getPicUrl());
-            dto.setPrice(p.getPrice());
-            return dto;}
-        ).toList();
-    }
+
+
+
 }

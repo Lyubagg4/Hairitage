@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer>{
     List<Product> findByProductSuitability_HairTypeId(int hairTypeId);
+    Product findByProductName(String productName);
 
 }

@@ -24,15 +24,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                                .requestMatchers(
-                                        "/login",
-                                        "/user/registration",
-                                        "/user/selection"
-                                ).permitAll()
-                                .requestMatchers("/user/accountInfo").authenticated()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/product/addProducts").hasRole("ADMIN")
-                                .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/logout",
+                                "/login",
+                                "/person/registration",
+                                "/person/selection"
+                        ).permitAll()
+                        .requestMatchers("/person/accountInfo", "/person/selection/auth").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/product/addProducts").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, e) -> {
@@ -61,7 +62,14 @@ public class SecurityConfig {
                             res.getWriter().write("{\"ok\":false,\"error\":\"bad_credentials\"}");
                         })
                     )
-                .logout(logout -> logout.logoutUrl("/logout"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler((req, res, auth) -> {
+                            res.setStatus(200);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"ok\":true}");
+                        })
+                )
                 .userDetailsService(personDetailsService);
         return http.build();
     }

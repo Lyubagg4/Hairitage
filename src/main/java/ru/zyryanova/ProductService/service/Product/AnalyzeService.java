@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.zyryanova.ProductService.entity.ProductClassificationScore;
 import ru.zyryanova.ProductService.entity.bd.*;
 import ru.zyryanova.ProductService.enums.Group;
+import ru.zyryanova.ProductService.finder.Finder;
 import ru.zyryanova.ProductService.repo.*;
 import ru.zyryanova.ProductService.service.RulesCacheService;
 import ru.zyryanova.ProductService.tools.Range;
@@ -18,19 +19,19 @@ public class AnalyzeService {
     private final IngredientRepo ingredientRepo;
     private final ProductRepo productRepo;
     private final HairTypeRepo hairTypeRepo;
-    private final RelevantRangeRepo relevantRangeRepo;
     private final ProductClassificationScoreRepo productClassificationScoreRepo;
     private final RulesCacheService rulesCacheService;
+    private final Finder finder;
 
 
     @Autowired
-    public AnalyzeService(IngredientRepo ingredientRepo, ProductRepo productRepo, HairTypeRepo hairTypeRepo, RelevantRangeRepo relevantRangeRepo, ProductClassificationScoreRepo productClassificationScoreRepo, RulesCacheService rulesCacheService) {
+    public AnalyzeService(IngredientRepo ingredientRepo, ProductRepo productRepo, HairTypeRepo hairTypeRepo, ProductClassificationScoreRepo productClassificationScoreRepo, RulesCacheService rulesCacheService, Finder finder) {
         this.ingredientRepo = ingredientRepo;
         this.productRepo = productRepo;
         this.hairTypeRepo = hairTypeRepo;
-        this.relevantRangeRepo = relevantRangeRepo;
         this.productClassificationScoreRepo = productClassificationScoreRepo;
         this.rulesCacheService = rulesCacheService;
+        this.finder = finder;
     }
 
     public ProductClassificationScore analyzeSostav(Product product){
@@ -38,6 +39,7 @@ public class AnalyzeService {
         productClassificationScore.setProduct(product);
         for(String ingredient: product.getIngredientsList()){
             Ingredient tekIngredient = ingredientRepo.findByIngredientName(ingredient);
+            if (tekIngredient == null) continue;
             Group groupOfTekIngredient = tekIngredient.getGroup().getGroupName();
             productClassificationScore.increment(groupOfTekIngredient);
         }
@@ -45,7 +47,7 @@ public class AnalyzeService {
     }
     @Transactional
     public void defineHairType(int productId){
-        Product product = productRepo.findById(productId).orElseThrow();
+        Product product = finder.findProductOrThrow(productId);
         Map<Integer, EnumMap<Group, Range>> rules = rulesCacheService.getRules();
         ProductClassificationScore pcs = analyzeSostav(product);
         for(int hairTypeId: rules.keySet()){

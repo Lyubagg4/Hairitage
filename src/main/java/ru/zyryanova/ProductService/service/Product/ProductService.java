@@ -8,19 +8,16 @@ import ru.zyryanova.ProductService.entity.bd.Product;
 import ru.zyryanova.ProductService.entity.bd.ProductType;
 import ru.zyryanova.ProductService.repo.*;
 
+import java.util.List;
 
 @Service
 public class ProductService {
     private final ProductRepo productRepo;
-    private final RelevantRangeRepo relevantRangeRepo;
-    private final IngredientRepo ingredientRepo;
     private final ProductTypeRepo productTypeRepo;
 
     @Autowired
-    public ProductService(ProductRepo productRepo, RelevantRangeRepo relevantRangeRepo1, IngredientRepo ingredientRepo, ProductTypeRepo productTypeRepo) {
+    public ProductService(ProductRepo productRepo, ProductTypeRepo productTypeRepo) {
         this.productRepo = productRepo;
-        this.relevantRangeRepo = relevantRangeRepo1;
-        this.ingredientRepo = ingredientRepo;
         this.productTypeRepo = productTypeRepo;
     }
 
@@ -33,11 +30,32 @@ public class ProductService {
         Product product = new Product();
         product.setProductName(productDto.getProductName());
         ProductType productType = productTypeRepo.findByProductTypeName(productDto.getProductTypeName());
+        if (productType == null) {
+            throw new IllegalStateException("Тип продукта не найден");
+        }
+        product.setProductType(productType);
         product.setProductType(productType);
         product.setIngredientsList(productDto.getIngredients());
         product.setPrice(productDto.getPrice());
         product.setPicUrl(productDto.getPicUrl());
         return product;
+    }
+
+    public List<ProductDto> listOfProducts(int hairTypeId){
+        List<Product> listOfProducts = productRepo.findByProductSuitability_HairTypeId(hairTypeId);
+        return responseList(listOfProducts);
+    }
+
+    public List<ProductDto> responseList(List<Product> listOfProducts){
+        return listOfProducts.stream().map(p ->{
+            ProductDto dto = new ProductDto();
+            dto.setProductName(p.getProductName());
+            dto.setProductTypeName(p.getProductType().getProductTypeName());
+            dto.setIngredients(p.getIngredientsList());
+            dto.setPicUrl(p.getPicUrl());
+            dto.setPrice(p.getPrice());
+            return dto;}
+        ).toList();
     }
 }
 

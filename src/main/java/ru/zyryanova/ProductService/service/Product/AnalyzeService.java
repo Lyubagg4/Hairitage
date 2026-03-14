@@ -62,7 +62,6 @@ public class AnalyzeService {
     }
     public boolean isOkForHairType(ProductClassificationScore pcs,
                                    EnumMap<Group, Range> rangeByGroup) {
-
         for (Map.Entry<Group, Range> e : rangeByGroup.entrySet()) {
             Group group = e.getKey();
             Range rr = e.getValue();

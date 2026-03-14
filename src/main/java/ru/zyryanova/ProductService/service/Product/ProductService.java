@@ -29,6 +29,7 @@ public class ProductService {
     public Product convertToProduct(ProductDto productDto){
         Product product = new Product();
         product.setProductName(productDto.getProductName());
+        System.out.println(productDto.getProductTypeName());
         ProductType productType = productTypeRepo.findByProductTypeName(productDto.getProductTypeName());
         if (productType == null) {
             throw new IllegalStateException("Тип продукта не найден");

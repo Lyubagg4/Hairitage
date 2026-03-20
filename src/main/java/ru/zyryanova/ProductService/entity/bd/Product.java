@@ -27,7 +27,7 @@ public class Product {
     @Column(name = "pic_url")
     private String picUrl;
 
-    @Column(name = "price")
+    @Column(name = "price_category")
     private String price;
 
     @ManyToMany

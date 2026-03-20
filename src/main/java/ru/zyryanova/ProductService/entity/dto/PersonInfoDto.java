@@ -1,18 +1,21 @@
 package ru.zyryanova.ProductService.entity.dto;
 
 
+import java.util.List;
+
 public class PersonInfoDto {
     private String username;
     private String email;
-    private Integer hairType;
+    private Integer hairTypeId;
+    private List<PersonResultDto> history;
 
     public PersonInfoDto() {}
 
-    public PersonInfoDto(String username, String email, Integer hairType) {
-        this.username = username;
+    public PersonInfoDto(Integer hairTypeId, String email, String username, List<PersonResultDto> history) {
+        this.hairTypeId = hairTypeId;
         this.email = email;
-        this.hairType = hairType;
-
+        this.username = username;
+        this.history = history;
     }
 
     public String getUsername() { return username; }
@@ -21,11 +24,19 @@ public class PersonInfoDto {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public Integer getHairType() {
-        return hairType;
+    public Integer getHairTypeId() {
+        return hairTypeId;
     }
 
-    public void setHairType(Integer hairType) {
-        this.hairType = hairType;
+    public void setHairTypeId(Integer hairTypeId) {
+        this.hairTypeId = hairTypeId;
+    }
+
+    public List<PersonResultDto> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<PersonResultDto> history) {
+        this.history = history;
     }
 }

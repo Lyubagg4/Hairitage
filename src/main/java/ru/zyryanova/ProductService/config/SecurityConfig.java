@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 "/person/registration",
                                 "/person/selection"
                         ).permitAll()
-                        .requestMatchers("/person/accountInfo", "/person/selection/auth").authenticated()
+                        .requestMatchers("/person/accountInfo", "/person/selection/auth", "/person/selection/auth",
+                                "/person/selection/*").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/product/addProducts").hasRole("ADMIN")
                         .anyRequest().permitAll()

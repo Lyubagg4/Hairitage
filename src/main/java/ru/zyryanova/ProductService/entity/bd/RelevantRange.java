@@ -1,24 +1,20 @@
 package ru.zyryanova.ProductService.entity.bd;
 
-
 import jakarta.persistence.*;
-import ru.zyryanova.ProductService.entity.bd.svyazy.RelevantRangeId;
-
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "relevant_range")
 public class RelevantRange {
 
-    @EmbeddedId
-    private RelevantRangeId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "relevant_range_id")
+    private Integer id;
 
-    @MapsId("groupId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "group_id")
-    private Groups group;
+    @JoinColumn(name = "purpose_ing_id")
+    private PurposeIng purposeIng;
 
-    @MapsId("hairTypeId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "hair_type_id")
     private HairType hairType;
@@ -31,20 +27,20 @@ public class RelevantRange {
 
     protected RelevantRange() {}
 
-    public RelevantRangeId getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(RelevantRangeId id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Groups getGroup() {
-        return group;
+    public PurposeIng getPurposeIng() {
+        return purposeIng;
     }
 
-    public void setGroup(Groups group) {
-        this.group = group;
+    public void setPurposeIng(PurposeIng purposeIng) {
+        this.purposeIng = purposeIng;
     }
 
     public HairType getHairType() {

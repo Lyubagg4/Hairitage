@@ -21,7 +21,7 @@ public class PersonDetailsService implements org.springframework.security.core.u
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Person person = personRepo.findByEmail(username);
         if (person == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("Пользователь не найден");
         }
         return new PersonDetailsEntity(person);
     }

@@ -29,13 +29,17 @@ public class PersonController {
         this.registrationService = registrationService;
         this.personService = personService;
     }
-    // это подборка сразу на основе определения типа волос
+    // это подборка сразу на основе определения типа волос (список сюда посылается)
     @PostMapping("/selection")
     public List<ProductDto> selectHairTypeAndProducts(@RequestBody List<Integer> answers, Authentication authentication){
         int hairTypeId = selectionService.selectHairType(answers, authentication);
         return productService.listOfProducts(hairTypeId);
     }
-    // это подборка продуктов для аутентифицированного пользователя
+    @GetMapping("/selection/{hairTypeId}")
+    public List<ProductDto> getProductsByHairType(@PathVariable int hairTypeId) {
+        return productService.listOfProducts(hairTypeId);
+    }
+    // это подборка продуктов для аутентифицированного пользователя (подборка для аутентифицированного пользователя из бдшки)
     @GetMapping("/selection/auth")
     public List<ProductDto> selectProductsOfAuthPerson(Authentication authentication){
         int hairTypeId = personService.defineHairTypeOfAuthPerson(authentication).getHairTypeId();

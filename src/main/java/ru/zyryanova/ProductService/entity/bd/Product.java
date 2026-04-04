@@ -1,6 +1,8 @@
 package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Product {
     private Integer productId;
 
     @Column(name = "product_name", nullable = false)
+    @NotBlank
     private String productName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,19 +25,22 @@ public class Product {
     private ProductType productType;
 
     @Column(name = "ingredients_list", columnDefinition = "text[]")
+    @NotEmpty
     private List<String> ingredientsList;
 
     @Column(name = "pic_url")
+    @NotBlank
     private String picUrl;
 
     @Column(name = "price_category")
+    @NotBlank
     private String price;
 
     @ManyToMany
     @JoinTable(
             name = "product_suitability",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "hair_type_id")
+            inverseJoinColumns = @JoinColumn(name = "hairtype_id")
     )
     private Set<HairType> productSuitability = new HashSet<>();
 

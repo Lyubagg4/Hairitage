@@ -87,7 +87,6 @@ public class AnalyzeService {
             pcs.setProduct(product);
             pcs.setPurposeIng(purposeIng);
             pcs.setScore(score);
-
             productClassScoreRepo.save(pcs);
         }
     }

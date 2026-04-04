@@ -1,16 +1,18 @@
 package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "hair_type")
+@Table(name = "hairtype")
 public class HairType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hair_type_id")
+    @Column(name = "hairtype_id")
     private Integer hairTypeId;
 
-    @Column(name = "hair_type_name", nullable = false, unique = true)
+    @Column(name = "hairtype_name", nullable = false, unique = true)
+    @NotBlank
     private String hairTypeName;
 
     public HairType() {

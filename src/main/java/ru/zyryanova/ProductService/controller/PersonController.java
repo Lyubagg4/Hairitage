@@ -1,10 +1,13 @@
 package ru.zyryanova.ProductService.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.zyryanova.ProductService.entity.dto.PersonInfoDto;
+import ru.zyryanova.ProductService.entity.dto.PersonUpdateDto;
 import ru.zyryanova.ProductService.entity.dto.ProductDto;
 import ru.zyryanova.ProductService.entity.auth.Person;
 import ru.zyryanova.ProductService.service.Product.ProductService;
@@ -13,6 +16,7 @@ import ru.zyryanova.ProductService.service.User.RegistrationService;
 import ru.zyryanova.ProductService.service.User.PersonService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
@@ -46,7 +50,7 @@ public class PersonController {
         return productService.listOfProducts(hairTypeId);
     }
     @PostMapping("/registration")
-    public void registration(@RequestBody Person person){
+    public void registration(@RequestBody @Valid Person person){
         registrationService.register(person);
     }
 
@@ -54,4 +58,28 @@ public class PersonController {
     public ResponseEntity<PersonInfoDto> accountInfo(Authentication authentication) {
         return personService.showInfo(authentication.getName());
     }
+
+    @PatchMapping("/update")
+    public void updatePerson(@RequestBody @Valid PersonUpdateDto dto, Authentication authentication) {
+        personService.updatePerson(dto, authentication);
+    }
+
+    @GetMapping("/isAdmin")
+    public Map<String, Boolean> isAdmin(Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        return Map.of("isAdmin", isAdmin);
+    }
+
+    @GetMapping("/checkAuth")
+    public Map<String, Boolean> checkAuth(Authentication authentication) {
+        boolean authenticated =
+                authentication != null &&
+                        authentication.isAuthenticated() &&
+                        !(authentication instanceof AnonymousAuthenticationToken);
+
+        return Map.of("authenticated", authenticated);
+    }
+
 }

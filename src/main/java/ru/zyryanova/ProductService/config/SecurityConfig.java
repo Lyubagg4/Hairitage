@@ -28,10 +28,10 @@ public class SecurityConfig {
                                 "/logout",
                                 "/login",
                                 "/person/registration",
-                                "/person/selection"
+                                "/person/selection",
+                                "/auth/check"
                         ).permitAll()
-                        .requestMatchers("/person/accountInfo", "/person/selection/auth", "/person/selection/auth",
-                                "/person/selection/*").authenticated()
+                        .requestMatchers("/person/accountInfo", "/person/selection/auth").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/product/addProducts").hasRole("ADMIN")
                         .anyRequest().permitAll()
@@ -62,7 +62,7 @@ public class SecurityConfig {
                             res.setContentType("application/json");
                             res.getWriter().write("{\"ok\":false,\"error\":\"bad_credentials\"}");
                         })
-                    )
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((req, res, auth) -> {

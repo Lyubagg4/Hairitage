@@ -22,7 +22,7 @@ public class PersonResult {
     private Person person;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "hair_type_id")
+    @JoinColumn(name = "hairtype_id")
     private HairType hairType;
 
     @Column(name = "created_at", nullable = false)

@@ -1,5 +1,6 @@
 package ru.zyryanova.ProductService.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.zyryanova.ProductService.entity.dto.ProductDto;
 import ru.zyryanova.ProductService.service.Product.AnalyzeService;
@@ -19,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping("/addProducts")
-    public void createProduct(@RequestBody List<ProductDto> productDto){
+    public void createProduct(@RequestBody List<@Valid ProductDto> productDto){
         for (ProductDto dto : productDto) {
             int productId = productService.createProduct(dto).getProductId();
             analyzeService.defineHairType(productId);

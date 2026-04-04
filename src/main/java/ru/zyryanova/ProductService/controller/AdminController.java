@@ -1,6 +1,8 @@
 package ru.zyryanova.ProductService.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import ru.zyryanova.ProductService.entity.bd.Product;
 import ru.zyryanova.ProductService.entity.dto.ProductDto;
@@ -37,11 +39,11 @@ public class AdminController {
         adminManageService.deleteProduct(id);
     }
     @PatchMapping("/update/{id}")
-    public void updateProduct(@RequestBody ProductDto productDto, @PathVariable int id){
+    public void updateProduct(@RequestBody @Valid ProductDto productDto, @PathVariable int id){
         adminManageService.updateProduct(productDto, id);
     }
     @PostMapping("/create")
-    public void createProduct(@RequestBody ProductDto productDto){
+    public void createProduct(@RequestBody @Valid ProductDto productDto){
         int productId = productService.createProduct(productDto).getProductId();
         analyzeService.defineHairType(productId);
     }

@@ -11,7 +11,7 @@ public class ProductClassScore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_class_score_id")
+    @Column(name = "product_class_score_id", unique = true)
     private Integer productClassScoreId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,7 +19,7 @@ public class ProductClassScore {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purpose_ing_id", nullable = false)
+    @JoinColumn(name = "purpose_id", nullable = false)
     private PurposeIng purposeIng;
 
     @Column(name = "score", nullable = false)
@@ -58,6 +58,7 @@ public class ProductClassScore {
     public void setScore(Integer score) {
         this.score = score;
     }
+
 }
 
 

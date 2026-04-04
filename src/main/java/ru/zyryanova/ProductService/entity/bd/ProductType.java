@@ -1,6 +1,7 @@
 package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "product_type")
@@ -10,7 +11,8 @@ public class ProductType {
     @Column(name = "product_type_id")
     private Integer productTypeId;
 
-    @Column(name = "product_type_name", nullable = false, unique = true)
+    @Column(name = "product_type_name", unique = true)
+    @NotBlank
     private String productTypeName;
 
     public ProductType() {

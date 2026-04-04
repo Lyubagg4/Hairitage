@@ -1,9 +1,16 @@
 package ru.zyryanova.ProductService.enums;
 
 public enum Group {
-    HUMECTANTS,
+    SURFACTANTS,
+    CONDITIONING_AGENTS,
+    SILICONES,
+    OILS,
     EMOLLIENTS,
+    HUMECTANTS,
     PROTEINS,
-    DRYING_ALCOHOLS,
-    HEAVY_OILS
+    POLYMERS,
+    EXTRACTS,
+    REPAIR_ACTIVES,
+    ACIDS,
+    FUNCTIONAL_ADDITIVES
 }

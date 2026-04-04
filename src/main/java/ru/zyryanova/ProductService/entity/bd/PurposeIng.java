@@ -4,16 +4,16 @@ import jakarta.persistence.*;
 import ru.zyryanova.ProductService.enums.Group;
 
 @Entity
-@Table(name = "purpose_ing")
+@Table(name = "purpose")
 public class PurposeIng {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "purpose_ing_id")
+    @Column(name = "purpose_id")
     private Integer purposeIngId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "purpose_ing_name")
+    @Column(name = "purpose_name")
     private Group purposeIngName;
 
     public PurposeIng() {}

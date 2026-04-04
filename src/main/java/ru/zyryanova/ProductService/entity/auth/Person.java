@@ -1,6 +1,9 @@
 package ru.zyryanova.ProductService.entity.auth;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import ru.zyryanova.ProductService.entity.bd.HairType;
 import ru.zyryanova.ProductService.enums.Role;
 
@@ -13,20 +16,26 @@ public class Person{
     private int id;
 
     @Column(name = "username")
+    @NotBlank
     private String username;
 
-    @Column(name = "email")
+
+    @Column(name = "email", unique = true)
+    @NotBlank
+    @Email
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    @Size(min = 8, max = 100)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "hair_type_id")
+    @JoinColumn(name = "hairtype_id")
     private HairType hairType;
 
     public Person() {

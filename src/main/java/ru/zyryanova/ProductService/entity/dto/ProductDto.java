@@ -1,12 +1,20 @@
 package ru.zyryanova.ProductService.entity.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.List;
 
 public class ProductDto{
+    @NotBlank
     private String productName;
+    @NotBlank
     private String productTypeName;
+    @NotEmpty
     private List<String> ingredients;
+    @NotBlank
     private String picUrl;
+    @NotBlank
     private String price;
 
     public ProductDto() {

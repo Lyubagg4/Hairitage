@@ -1,6 +1,7 @@
 package ru.zyryanova.ProductService.entity.bd;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "ingredient")
@@ -12,10 +13,11 @@ public class Ingredient {
     private Integer ingredientId;
 
     @Column(name = "ingredient_name", nullable = false)
+    @NotBlank
     private String ingredientName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "purpose_ing_id")
+    @JoinColumn(name = "purpose_id")
     private PurposeIng purposeIng;
 
     public Ingredient() {

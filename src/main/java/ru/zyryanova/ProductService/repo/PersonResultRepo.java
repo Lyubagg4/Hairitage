@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PersonResultRepo extends JpaRepository<PersonResult, Integer> {
-    List<PersonResult> findByPersonIdOrderByCreatedAtDesc(Integer personId);
+    List<PersonResult> findByPerson_IdOrderByCreatedAtDesc(Integer personId);
 }

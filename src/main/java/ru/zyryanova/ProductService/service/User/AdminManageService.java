@@ -58,6 +58,7 @@ public class AdminManageService {
             analyzeService.defineHairType(product.getProductId());
         }
     }
+
     @Transactional
     public void addRole(String email){
         finder.findPersonOrThrow(email).setRole(ru.zyryanova.ProductService.enums.Role.ADMIN);
